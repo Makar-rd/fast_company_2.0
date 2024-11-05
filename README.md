@@ -1,1 +1,0 @@
-# fast_company_2.0
