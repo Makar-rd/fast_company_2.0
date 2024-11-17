@@ -105,7 +105,7 @@ const AuthProvider = ({ children }) => {
 
     async function createUser(data) {
         try {
-            const { content } = userService.create(data);
+            const { content } = await userService.create(data);
             console.log("Created user data:", content);
             setUser(content);
         } catch (error) {
@@ -134,10 +134,15 @@ const AuthProvider = ({ children }) => {
 
     async function updateCurrentUser(data) {
         try {
-            const { content } = await userService.update(currentUser._id, data);
-            setUser(content);
-            localStorageService.setAuthData(content);
-            toast.success("профиль обновлен!");
+            const response = await userService.create({
+                ...data,
+                _id: currentUser._id
+            });
+            if (response) {
+                setUser(response);
+                localStorageService.setAuthData(response);
+                // toast.success("Профиль обновлен!");
+            }
         } catch (error) {
             errorCatcher(error);
         }
